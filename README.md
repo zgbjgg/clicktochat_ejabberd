@@ -32,6 +32,21 @@ Registering client users
 
 NOTE: At this step you must have created helpdesk users
 
-Let's create a single user, using a http interface:
+Let's create a single user, using http interface:
 
-			$ curl -i -H "Accept: text/xml" -X POST -d "<?xml version='1.0'?><registration><username>george5</username><password>123</password></registration>" http://192.168.24.182:5280/clicktochat/register
+			$ curl -i -H "Accept: text/xml" -X POST -d "<?xml version='1.0'?><registration><username>my_client</username><password>123</password></registration>" http://IP:PORT/clicktochat/register
+
+The response will be an xml containing the client's nick and the 
+helpdesk user that is automatically linked to start the chat, from your
+application you must send messages to this nick (helpdesk user).
+
+Listing all users connected
+====
+
+Using http interface:
+
+			curl -i -X GET http://IP:PORT/clicktochat/list
+
+The response will be an xml containing all helpdesk users connected, now from your 
+application you can choose one and start the chat.
+
