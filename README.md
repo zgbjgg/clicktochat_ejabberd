@@ -25,7 +25,33 @@ Let's compile and install:
 
 			$ make && sudo make install
 
-Run 
+Enable Click To Chat
+====
+
+In the config file /etc/ejabberd/ejabberd.cfg configure the sections:
+
+modules, add mod_clicktochat:
+
+			{modules,
+		         [...
+          		  ...
+          		  ...
+          		  {mod_clicktochat, []}
+         		 ]}.
+
+and in the section ejabberd_http, add a new handler mod_http_clicktochat
+
+			{5280, ejabberd_http, [...
+					       ...	
+                         		       http_poll,
+                         		       %%register,
+                         		       web_admin,
+                         		       {request_handlers,
+                          			[
+                           			 {["clicktochat"], mod_http_clicktochat}
+                          			]}
+                        		       ]}.
+
 
 Registering client users
 ====
@@ -49,4 +75,16 @@ Using http interface:
 
 The response will be an xml containing all helpdesk users connected, now from your 
 application you can choose one and start the chat.
+
+Round Robin Queue
+====
+
+This project implements the round robin in the queue, when a client user is registered
+and connected, then in the queue, a helpdesk user is get and placed to the end
+of the queue, ensuring that the client users are equally asigned to the helpdesk users,
+avoiding that a single user attends all requests.
+
+Integrating with Riak
+====
+
 
