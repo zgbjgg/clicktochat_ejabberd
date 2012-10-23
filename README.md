@@ -77,21 +77,21 @@ application you can choose one and start the chat.
 Request - Response RESTful Services Description
 ====
 
-	-----------------------------------------------------------------------------------------------------------------
-	|         URI             | Method |           Request Body             |              Response                 |
-	-----------------------------------------------------------------------------------------------------------------
-	|                         |        |   <?xml version='1.0'?>            |     <?xml version='1.0'?>             |	
-	|  /clicktochat/register  |  POST  |   <registration>                   |     <register>                        |
-	|                         |        |     <username>username</username>  |       <status>ok</status>             |
-	|                         |        |     <password>pass</password>      |       <from>user_from@domain</from>   |
-	|                         |        |   </registration>                  |       <to>user_to@domain</to>         |
-	|                         |        |                                    |     </register>                       |
-	-----------------------------------------------------------------------------------------------------------------
-	|                         |        |                                    |     <?xml version='1.0'?>             |
-	|  /clicktochat/list      |  GET   |              empty                 |     <connected_users>                 |
-	|                         |        |                                    |       <username>username</username>   |
-	|                         |        |                                    |     </connected_users>                |
-	-----------------------------------------------------------------------------------------------------------------	
+	--------------------------------------------------------------------------------------------------------------------------------------
+	|         URI             | Method |           Request Body             |              Response                 |  HTTP Status Codes |
+	--------------------------------------------------------------------------------------------------------------------------------------
+	|                         |        |   <?xml version='1.0'?>            |     <?xml version='1.0'?>             |                    |
+	|  /clicktochat/register  |  POST  |   <registration>                   |     <register>                        |                    |
+	|                         |        |     <username>username</username>  |       <status>ok</status>             |  201 (Created)     |            
+	|                         |        |     <password>pass</password>      |       <from>user_from@domain</from>   |  400 (Bad Request) |
+	|                         |        |   </registration>                  |       <to>user_to@domain</to>         |                    |
+	|                         |        |                                    |     </register>                       |                    |
+	--------------------------------------------------------------------------------------------------------------------------------------
+	|                         |        |                                    |     <?xml version='1.0'?>             |                    |
+	|  /clicktochat/list      |  GET   |              empty                 |     <connected_users>                 |  200 (Ok)          |
+	|                         |        |                                    |       <username>username</username>   |  400 (Bad Request) |
+	|                         |        |                                    |     </connected_users>                |                    |
+	--------------------------------------------------------------------------------------------------------------------------------------
 		
 
 Round Robin Queue
