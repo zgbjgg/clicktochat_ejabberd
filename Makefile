@@ -5,13 +5,13 @@
 ## -------------------------------------------------------------------
 #
 # path to ejabberd ebin, is necessary for implements and compile
-# mod_click_to_chat.erl
-#
+# all .erl in src directory
+# 
 PATH_TO_EJABBERD_EBIN = /usr/lib/ejabberd/ebin/
 
 #
 # path to include files from ejabberd, is necessary for include and
-# compile mod_click_to_chat.erl
+# compile all .erl in src directory
 #
 PATH_TO_EJABBERD_INCLUDE = /usr/lib/ejabberd/include/
 
