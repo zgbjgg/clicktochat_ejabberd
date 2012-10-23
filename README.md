@@ -42,15 +42,13 @@ modules, add mod_clicktochat:
 and in the section ejabberd_http, add a new handler mod_http_clicktochat
 
 			{5280, ejabberd_http, [...
-					       ...	
-                         		       http_poll,
-                         		       %%register,
-                         		       web_admin,
-                         		       {request_handlers,
-                          			[
-                           			 {["clicktochat"], mod_http_clicktochat}
-                          			]}
-                        		       ]}.
+                                   ...
+                                   http_poll,
+                                   %%register,
+                                   web_admin,
+                                   {request_handlers,
+                                    [ {["clicktochat"], mod_http_clicktochat}]}
+                                  ]}.
 
 
 Registering client users
