@@ -76,7 +76,7 @@ Using http interface:
 The response will be an xml containing all helpdesk users connected, now from your 
 application you can choose one and start the chat.
 
-Request - Response Http Interface
+Request - Response RESTful Services Description
 ====
 
 	-----------------------------------------------------------------------------------------------------------------
