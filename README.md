@@ -79,20 +79,21 @@ application you can choose one and start the chat.
 Request - Response Http Interface
 ====
 
-			------------------------------------------------------
-			|
-			|
-			|
-			|
-			|
-			|
-			|
-			|
-			|
-			|
-			|
-			|
-			|
+	-----------------------------------------------------------------------------------------------------------------
+	|  	 URI   	  	  | Method |  	      Request Body   		|         	 Response          	|
+	-----------------------------------------------------------------------------------------------------------------
+	|			  |	   |  <?xml version='1.0'?>		|    <?xml version='1.0'?>		|	
+	|  /clicktochat/register  |  POST  |   	<registration>			|	<register>			|
+	|			  |        |	  <username>username</username> |         <status>ok</status>		|
+	|			  |	   |	  <password>pass</password>	|	  <from>user_from@domain</from>	|
+	|			  |	   |	</registration>			|	  <to>user_to@domain</to>	|
+        |			  |	   |					|	</register>			|								   ----------------------------------------------------------------------------------------------------------------
+	|			  |	   |      				|   <?xml version='1.0'?>		|
+	| /clicktochat/list	  |  GET   |		empty			|     <connected_users>			|
+	|			  |        |					|       <username>username</username>	|
+	|			  |	   |					|     </connected_users>		|
+	-----------------------------------------------------------------------------------------------------------------	
+		
 
 Round Robin Queue
 ====
