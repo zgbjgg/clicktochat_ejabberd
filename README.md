@@ -102,7 +102,11 @@ and connected, then in the queue, a helpdesk user is get and placed to the end
 of the queue, ensuring that the client users are equally asigned to the helpdesk users,
 avoiding that a single user attends all requests.
 
-Integrating with Riak
-====
-
-
+	queue                                                      then in the queue, get a user and pass to the end
+	--------------                                             --------------
+	|   USER-1   |                                             |   USER-2   |
+	|------------|                                             |------------|
+	|   USER-2   |  ======> a new client is registered ======> |   USER-3   |  =======>   now CLIENT-1 can start
+	|------------|                   (CLIENT-1)                |------------|             a chat with USER-1
+	|   USER-3   |                                             |   USER-1   |
+	--------------                                             --------------
