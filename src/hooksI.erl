@@ -49,7 +49,7 @@ on_user_send_packet(_From, _To, Packet) ->
     %	    none;
     %	[ To ] ->
     	    case Packet of
-		{xmlelement,"message",_, [_, {xmlelement, "body", _, [{xmlcdata, Data}]}] } ->
+		{xmlelement,"message",_, [_, {xmlelement, "body", _, [{xmlcdata, Data}|_]}|_] } ->
 		    ?INFO_MSG("on : ~p =  received : ~p ~n", [self(), Data]);
 		_                                                                           ->
 		    none
