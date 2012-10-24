@@ -54,7 +54,7 @@ and in the section ejabberd_http, add a new handler mod_http_clicktochat
 Registering client users
 ====
 
-NOTE: At this step you must have created helpdesk users
+NOTE: At this step you must have created helpdesk users and they can be connected to ejabberd!
 
 Let's create a single user, using http interface:
 
@@ -110,3 +110,10 @@ avoiding that a single user attends all requests.
 	|------------|                   (CLIENT-1)                |------------|             a chat with USER-1
 	|   USER-3   |                                             |   USER-1   |
 	--------------                                             --------------
+
+Integrating with DB
+====
+
+To save the conversation in any database that you choose, you can perform the 
+actions on module 'hooksI', in the function 'on_user_send_packet', in the case 
+where Packet is evaluated you can perform actions on it.
