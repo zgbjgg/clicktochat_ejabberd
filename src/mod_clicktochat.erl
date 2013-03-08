@@ -49,6 +49,7 @@ handle_call({user_online, JID}, _From, #state{host=Host, queue=Queue,
 		   _    ->
 		       [ JID ] ++ Queue
                end,
+    % ?INFO_MSG("user online on clicktochat ~nQueue:~p~nQueue Busy:~p~n", [NewQueue, QueueBusy]),
     {reply, ok, #state{host=Host, queue = NewQueue, 
 		       queue_busy = QueueBusy}};
 handle_call({user_offline, JID}, _From, #state{host=Host, queue=Queue, 
@@ -59,6 +60,7 @@ handle_call({user_offline, JID}, _From, #state{host=Host, queue=Queue,
 		   _    ->
 		       Queue -- [ JID ]
                end,
+    %? INFO_MSG("user offline on clicktochat ~nQueue:~p~nQueueBusy:~p~n", [NewQueue, QueueBusy]),
     {reply, ok, #state{host=Host, queue = NewQueue, 
 		       queue_busy = QueueBusy}};
 handle_call(get_queue, _From, State=#state{host=_Host, queue=Queue, 
@@ -83,17 +85,21 @@ handle_call({request_user, JID}, _From, State = #state{host=Host, queue=[{User, 
 			    _    ->
 			        {{ok, none}, State}
 		         end,
+    % ?INFO_MSG("request user on clicktochat ~nQueue:~p~nQueue Busy:~p~n", [Queue, QueueBusy]),
     {reply, Reply, NewState};
 handle_call(stop, _From, State)                                         ->
     {stop, normal, ok, State}.
 
+handle_cast({remove_user, _JID}, State = #state{host=_Host, queue=_Queue,
+                                               queue_busy=[]})        ->
+    {noreply, State};
 handle_cast({remove_user, JID}, State = #state{host=Host, queue=Queue, 
 					       queue_busy=QueueBusy}) ->
     NewState = case config:host_helpdesk() of
 		   Host ->
 		       [{JID, User}] = [ X || {JabberId, _}=X <- QueueBusy, JabberId =:= JID ],
 		       #state{host=Host, 
-			      queue=Queue ++ case [ {User, Ms + 1} || {U, Ms} <- Queue, U =:= User ] of
+			      queue=proplists:delete(User, Queue) ++ case [ {User, Ms + 1} || {U, Ms} <- Queue, U =:= User ] of
 					         [] ->
 						     [{User, 1}];
 						 Q  ->
@@ -103,6 +109,7 @@ handle_cast({remove_user, JID}, State = #state{host=Host, queue=Queue,
 		   _    ->
 		       State
 		end,
+    % ?INFO_MSG("remove user on clicktochat ~nQueue:~p~nQueue Busy:~p~n", [Queue, QueueBusy]),
     {noreply, NewState}.
 
 handle_info(_Info, State) ->
@@ -150,6 +157,8 @@ start(Host, Opts) ->
     Child = {?get_proc(Host, ?MODULE), {?MODULE, start_link, [Host, Opts]}, permanent,
 	     1000, worker, [?MODULE]},
     supervisor:start_child(ejabberd_sup, Child),
+    %?INFO_MSG("~p", [config:riak_erlang_client()]),
+    %[ true = code:add_path(Path) || Path <- config:riak_erlang_client() ],
     ?INFO_MSG("starting on ~p ~n", [self()]), 
     ok.
 

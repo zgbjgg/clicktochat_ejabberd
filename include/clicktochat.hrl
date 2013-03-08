@@ -10,6 +10,10 @@
 % content type in http request
 -define(content_type(Ctype), [{"Content-Type", Ctype}]).
 
+% http headers for javascript since it denies access to server
+-define(crossdomain, [{"Access-Control-Allow-Origin", "*"}, {"Access-Control-Allow-Methods", "POST, PUT, DELETE, GET, OPTIONS"},
+                      {"Access-Control-Allow-Headers", "origin, content-type, accept"}]).
+
 % config file path for clicktochat 
 % MY CONFIGURATION GOES HERE!!
 -define(config_file, "/etc/ejabberd/clicktochat.conf").

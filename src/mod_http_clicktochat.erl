@@ -36,28 +36,42 @@ stop(_Host) ->
     ?INFO_MSG("stopping on ~p ~n", [self()]),
     ok.
 
+process(_, {request, 'OPTIONS',         _, _, _, _, _, _,   _, _, _, _, _}) ->
+    {200, ?crossdomain ++ ?content_type("text/xml"), ""};
 process(["register"], {request, 'POST', _, _, _, _, _, Req, _, _, _, _, _}) ->
     [ Username, Password ] = parse_req(Req, ["username", "password"]),
     case ejabberd_auth:try_register(Username, config:host_client(), Password) of
 	{atomic, ok}     ->
             From = get_jid({Username, config:host_client()}),
 	    {ok, To} = mod_clicktochat:request_user(config:host_helpdesk(), From),
-	    {201, ?content_type("text/xml"), on_user_registered(From, get_jid(To))};
+	        {ok, Queue} = mod_clicktochat:get_queue(config:host_helpdesk()),
+    {ok, QueueBusy} = mod_clicktochat:get_queue_busy(config:host_helpdesk()),
+    ?INFO_MSG("remove user on clicktochat ~nQueue:~p~nQueue Busy:~p~n", [Queue, QueueBusy]),
+	    {201, ?crossdomain ++ ?content_type("text/xml"), on_user_registered(From, get_jid(To))};
 	{atomic, exists} ->
-	    {400, [], "exists"};
+	    {400, ?crossdomain, "exists"};
 	{error, not_allowed} ->
-	    {400, [], "not allowed"}
+	    {400, ?crossdomain, "not allowed"}
     end;
 process(["list"], _Req) ->
     case ejabberd_commands:execute_command(connected_users, []) of
 	{error, Error} ->
-	    {400, [], Error};
+	    {400, ?crossdomain, Error};
 	Result ->
- 	    {200, ?content_type("text/xml"), {xmlelement, <<"connected_users">>, [], 
+ 	    {200, ?crossdomain ++ ?content_type("text/xml"), {xmlelement, <<"connected_users">>, [], 
 					      on_list_connected_users(Result)}}
-    end;    
-process(_Path, _Req)         						   ->
-    {404, [], ""}.
+    end;
+process(["disconnect"], {request, 'POST', _, _, _, _, _, Req, _, _, _, _, _}) ->
+    [ Username ] = parse_req(Req, ["username"]),
+    [ User, Host ] = re:split(Username, "[@]", [{return, list}]),    
+    ok = ejabberd_auth:remove_user(User, Host),
+    mod_clicktochat:remove_user(config:host_helpdesk(), User ++ "@" ++ Host),
+    {ok, Queue} = mod_clicktochat:get_queue(config:host_helpdesk()),
+    {ok, QueueBusy} = mod_clicktochat:get_queue_busy(config:host_helpdesk()),
+    ?INFO_MSG("remove user on clicktochat ~nQueue:~p~nQueue Busy:~p~n", [Queue, QueueBusy]),
+    {200, ?crossdomain, ""};
+ process(_Path, _Req)         						   ->
+    {404, ?crossdomain, ""}.
 
 %%====================================================================
 %% Private API

@@ -37,5 +37,5 @@ clean:
 
 install:
 	cp -r include/*.hrl $(PATH_TO_EJABBERD_INCLUDE)
-	cp -r ebin/*.beam $(PATH_TO_EJABBERD_EBIN)
+	cp ebin/*.beam $(PATH_TO_EJABBERD_EBIN)
 	cp -r clicktochat.conf $(PATH_TO_EJABBERD_ETC)
