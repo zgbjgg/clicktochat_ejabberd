@@ -45,8 +45,7 @@ process(["register"], {request, 'POST', _, _, _, _, _, Req, _, _, _, _, _}) ->
             From = get_jid({Username, config:host_client()}),
 	    {ok, To} = mod_clicktochat:request_user(config:host_helpdesk(), From),
 	        {ok, Queue} = mod_clicktochat:get_queue(config:host_helpdesk()),
-    {ok, QueueBusy} = mod_clicktochat:get_queue_busy(config:host_helpdesk()),
-    ?INFO_MSG("remove user on clicktochat ~nQueue:~p~nQueue Busy:~p~n", [Queue, QueueBusy]),
+            {ok, QueueBusy} = mod_clicktochat:get_queue_busy(config:host_helpdesk()),
 	    {201, ?crossdomain ++ ?content_type("text/xml"), on_user_registered(From, get_jid(To))};
 	{atomic, exists} ->
 	    {400, ?crossdomain, "exists"};
@@ -68,7 +67,6 @@ process(["disconnect"], {request, 'POST', _, _, _, _, _, Req, _, _, _, _, _}) ->
     mod_clicktochat:remove_user(config:host_helpdesk(), User ++ "@" ++ Host),
     {ok, Queue} = mod_clicktochat:get_queue(config:host_helpdesk()),
     {ok, QueueBusy} = mod_clicktochat:get_queue_busy(config:host_helpdesk()),
-    ?INFO_MSG("remove user on clicktochat ~nQueue:~p~nQueue Busy:~p~n", [Queue, QueueBusy]),
     {200, ?crossdomain, ""};
  process(_Path, _Req)         						   ->
     {404, ?crossdomain, ""}.
